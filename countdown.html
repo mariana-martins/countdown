@@ -1,0 +1,146 @@
+<style>
+    .counter-countdown {
+        text-align: center;
+        background-color: #b342f4;
+        font-family: 'Brown-Regular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        padding: 1em;
+        text-transform: capitalize;
+    }
+    .counter-main {
+        display: inline-block;
+    }
+    .counter-row {
+        display: table-row;
+    }
+
+    .counter-column,
+    .counter-column-header,
+    .counter-column-space {
+        display: table-cell;
+        text-align: center;
+        color: #ffffff;
+        padding: 0.3em;
+    }
+
+    .counter-column,
+    .counter-column-header {
+        width: 1.85em;
+    }
+
+    .counter-column-space {
+        width: 0.57em;
+    }
+
+    p.counter-column-header,
+    p.counter-column-space {
+        font-weight: bold;
+        font-size: 5rem;
+    }
+
+    .counter-column {
+        font-family: 'Brown-Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 1rem;
+    }
+    @media only screen and (max-width: 600px) {
+        .counter-countdown {
+            padding: 0.5em;
+        }
+
+        .counter-column,
+        .counter-column-header {
+            width: 0.85em;
+        }
+
+        .counter-column-space {
+            width: 0.78em;
+        }
+
+        .counter-column,
+        .counter-column-header,
+        .counter-column-space {
+            padding: 0.15em;
+        }
+
+        p.counter-column-header,
+        p.counter-column-space {
+            font-size: 2rem;
+        }
+
+        .counter-column {
+            font-size: 0.8rem;
+        }
+    }
+</style>
+<section class="counter-countdown" role="timer">
+    <div class="counter-main">
+        <div class="counter-row">
+            <p id="counter-day" class="counter-column-header">00</p>
+            <p class="counter-column-space">:</p>
+            <p id="counter-hour" class="counter-column-header">00</p>
+            <p class="counter-column-space">:</p>
+            <p id="counter-minute" class="counter-column-header">00</p>
+            <p class="counter-column-space">:</p>
+            <p id="counter-second" class="counter-column-header">00</p>
+        </div>
+        <div class="counter-row">
+            <span class="counter-column">DAYS</span>
+            <span class="counter-space"></span>
+            <span class="counter-column">HOURS</span>
+            <span class="counter-space"></span>
+            <span class="counter-column">MINUTES</span>
+            <span class="counter-space"></span>
+            <span class="counter-column">SECONDS</span>
+        </div>
+    </div>
+</section>
+<script>
+    // Initial date
+    var initialDate = new Date('2019-06-30T09:00:00'); // =====> UPDATE THIS LINE WITH THE DATE THAT YOU WANT!
+
+    function runCounter(initialDate) {
+        // It convert time to milliseconds
+        var stopAt = initialDate.getTime();
+
+        var reference = setInterval(function() {
+            var diffInSeconds = (stopAt - Date.now()) / 1000;
+            if (diffInSeconds >= 0) {
+                updateCounter(diffInSeconds);
+            } else {
+                updateCounter(0);
+                clearInterval(reference);
+            }
+        }, 1000);
+    }
+    /*
+      formatNumber formats our countdown. It transform our numbers in integer
+      numbers and set zeros when necessary.
+    */
+    function formatNumber(number) {
+        var numberAsInt = parseInt(number);
+        if (numberAsInt < 0) {
+            return '00';
+        } else if (numberAsInt < 10) {
+            return '0' + numberAsInt;
+        } else {
+            return '' + numberAsInt;
+        }
+    }
+
+    /*
+      updateCounter are updating the counter. We need to use a format like 00 : 00 : 00.
+      So I divided our counter in three elements and I'm updating it separately.
+    */
+    function updateCounter(diffInSeconds) {
+        var days = diffInSeconds / 86400;
+        var hours = (diffInSeconds / 3600) % 24;
+        var minutes = (diffInSeconds / 60) % 60;
+        var seconds = diffInSeconds % 60;
+
+        document.getElementById('counter-day').innerHTML = formatNumber(days);
+        document.getElementById('counter-hour').innerHTML = formatNumber(hours);
+        document.getElementById('counter-minute').innerHTML = formatNumber(minutes);
+        document.getElementById('counter-second').innerHTML = formatNumber(seconds);
+    }
+
+    runCounter(initialDate);
+</script>
